@@ -7,11 +7,15 @@ class HTMLLexer(Lexer):
         DOCTYPE,
         TAG_OPEN_SLASH,
         TAG_OPEN,
-        TEXT
+        TEXT,
+        JAVASCRIPT
     }
+
+    ignore = ' \t\r\n'
 
     COMMENT = r'<!-- .*? -->'
     DOCTYPE = r'<!DOCTYPE html>'
+    JAVASCRIPT = r'\<script\ type=\"text\/javascript\"\>.*</script>'
     TAG_OPEN_SLASH = r'</'
     TAG_OPEN = r'<'
     TEXT = r'[^<]+'
@@ -106,6 +110,10 @@ class HTMLParser(Parser):
     def html_element(self, p):
         return ("Text", p.TEXT.strip())
 
+    @_('JAVASCRIPT')
+    def html_element(self, p):
+        return ("Javascript", p.JAVASCRIPT.strip())
+
     @_('TAG_OPEN NAME tag_contents TAG_CLOSE html_elements TAG_OPEN_SLASH NAME TAG_CLOSE')
     def html_element(self, p):
         return ("Element", p.NAME0, p.tag_contents, p.html_elements)
@@ -143,6 +151,7 @@ if __name__ == '__main__':
     data = """
         <!DOCTYPE html>
         <!-- just a comment -->
+        <script type="text/javascript"></script>
         <a b=c />
         <a>Tomek</a>
         <b></b>
