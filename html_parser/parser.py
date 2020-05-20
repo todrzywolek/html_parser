@@ -147,13 +147,19 @@ class HTMLParser(Parser):
         return ("Attribute", p.NAME, p.DOUBLE_QUOTED)
 
 
+def parse(webpage):
+    lexer = HTMLLexer()
+    parser = HTMLParser()
+    return parser.parse(lexer.tokenize(webpage))
+
 if __name__ == '__main__':
     data = """
         <!DOCTYPE html>
         <!-- just a comment -->
         <script type="text/javascript"></script>
+        Hello
         <a b=c />
-        <a>Tomek</a>
+        <a href="http">Tomek</a>
         <b></b>
     """.strip()
 

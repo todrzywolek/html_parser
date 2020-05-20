@@ -1,2 +1,11 @@
 *.pyc
 *.egg-info/
+.idea
+
+# pdf latex related stuff
+*.aux
+*.out
+*.log
+*.taglog
+*.tex
+*.pdf
